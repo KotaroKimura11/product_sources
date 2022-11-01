@@ -100,6 +100,7 @@ public class skiing_movement : MonoBehaviour
     private GoalTeapMove End_Audio_mute;
 
     public GameObject goal;
+    private float speedDownTimer = 0;
     
 
     void Start()
@@ -302,7 +303,11 @@ public class skiing_movement : MonoBehaviour
         
         //Debug.Log("z" + moveDirection.z);
         //Debug.Log("z_accel" + z);
-        controller.Move(moveDirection * Time.deltaTime);
+        if(speedDownTimer<=0)controller.Move(moveDirection * Time.deltaTime);
+        else{
+            controller.Move(new Vector3(moveDirection.x, moveDirection.y, 10.0f) * Time.deltaTime);
+            speedDownTimer -= Time.deltaTime;
+        }
 
 
         Vector3 localAngle = myTransform.localEulerAngles;//アバターを地面に垂直に立たせる
@@ -394,9 +399,9 @@ public class skiing_movement : MonoBehaviour
         }
         if(other.CompareTag("snowman"))
         {
-            
-            moveDirection.z = 3f;
-            z_speed = 3f;
+            //moveDirection.z = 3f;
+            //z_speed = 3f;
+            speedDownTimer = 0.5f;
         }
 
         if (other.CompareTag("flags"))
